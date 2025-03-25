@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2025 at 12:37 PM
+-- Generation Time: Mar 25, 2025 at 02:49 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -59,7 +59,7 @@ INSERT INTO `access_log` (`id`, `employee_id`, `access_timestamp`) VALUES
 CREATE TABLE `change_log` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `employee_id` varchar(9) DEFAULT NULL,
-  `change_type` varchar(60) DEFAULT NULL,
+  `change_info` varchar(60) DEFAULT NULL,
   `change_timestamp` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -67,7 +67,7 @@ CREATE TABLE `change_log` (
 -- Dumping data for table `change_log`
 --
 
-INSERT INTO `change_log` (`id`, `employee_id`, `change_type`, `change_timestamp`) VALUES
+INSERT INTO `change_log` (`id`, `employee_id`, `change_info`, `change_timestamp`) VALUES
 (1, '202503002', 'ADDED INVENTORY BFORA - Berry Fun Orange', '2025-03-25 19:15:24'),
 (2, '202503002', 'ADDED INVENTORY SCLEM - Super Citric Lemon', '2025-03-25 19:15:53'),
 (3, '202503002', 'ADDED INVENTORY SCLEM - Piltover Special HexSoda', '2025-03-25 19:17:19'),
@@ -76,7 +76,13 @@ INSERT INTO `change_log` (`id`, `employee_id`, `change_type`, `change_timestamp`
 (6, '202503002', 'DELETED INVENTORY SCLEM - Super Citric Lemon', '2025-03-25 19:27:45'),
 (7, '202503002', 'DELETED INVENTORY BFORA - Berry Fun Orange', '2025-03-25 19:33:51'),
 (8, '202503002', 'ADDED INVENTORY PSHXS - Magnetic Magic Cherry', '2025-03-25 19:36:25'),
-(9, '202503002', 'DELETED INVENTORY MMCHR - Magnetic Magic Cherry', '2025-03-25 19:36:40');
+(9, '202503002', 'DELETED INVENTORY MMCHR - Magnetic Magic Cherry', '2025-03-25 19:36:40'),
+(10, '202503002', 'EDITED INVENTORY FFTET NAME TO i love you viktor', '2025-03-25 21:26:01'),
+(11, '202503002', 'EDITED INVENTORY FFTET NAME TO 180', '2025-03-25 21:42:59'),
+(12, '202503002', 'EDITED INVENTORY FFTET NAME TO i love you viktor', '2025-03-25 21:43:19'),
+(13, '202503002', 'EDITED INVENTORY FFTET QUANTITY TO 420', '2025-03-25 21:43:20'),
+(14, '202503002', 'EDITED INVENTORY FFTET PRICE TO 999.99', '2025-03-25 21:46:16'),
+(15, '202503002', 'EDITED INVENTORY FFTET EXPIRATION DATE TO 2025-01-19', '2025-03-25 21:48:04');
 
 -- --------------------------------------------------------
 
@@ -120,6 +126,7 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`id`, `name`, `quantity`, `exp_date`, `price`) VALUES
+('FFTET', 'i love you viktor', 420, '2025-01-19', 999.99),
 ('PSHXS', 'Piltover Special HexSoda', 50, '2025-09-30', 149.99);
 
 -- --------------------------------------------------------
@@ -190,7 +197,7 @@ ALTER TABLE `access_log`
 -- AUTO_INCREMENT for table `change_log`
 --
 ALTER TABLE `change_log`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables
