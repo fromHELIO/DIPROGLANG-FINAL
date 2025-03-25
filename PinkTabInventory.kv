@@ -5,6 +5,8 @@ Navigator:
         id: two
     AddRecord:
         id: three
+    DeleteRecord:
+        id: four
 
 # SCREENS 
 
@@ -103,15 +105,20 @@ Navigator:
                 RoundedButton:
                     text: "Edit Record"
                     font_size: 28
+
             BoxLayout:
                 spacing: 20
                 orientation: "horizontal"
                 RoundedButton:
                     text: "Delete Record"
                     font_size: 26
+                    on_press:
+                        root.manager.transition.direction = 'left'
+                        root.manager.current = 'delete'
                 RoundedButton:
                     text: "Show Report"
                     font_size: 28
+
             BoxLayout:
                 spacing: 20
                 orientation: "horizontal"
@@ -124,6 +131,7 @@ Navigator:
 <AddRecord>:
     name: "add"
 
+    itemId: itemId
     item_name: item_name
     quantity: quantity
     exp_date: exp_date
@@ -134,6 +142,33 @@ Navigator:
             cols: 1
             size_hint: .5, .5
             spacing: 10
+
+            # ID
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 100
+                Label:
+                    text: "Item ID:"
+                    size_hint: .1, .1
+                    font_size: 20
+                    bold: True
+                    pos_hint: {"center_y": 0.5}
+                    color: "#8a2038"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                TextInput:
+                    id: itemId
+                    hint_text: "5 letters, all characters"
+                    hint_text_color: "#e3b3c5"
+                    multiline: False
+                    padding: 10, 10
+                    size_hint: None, None
+                    size: 300, 50
+                    pos_hint: {"center_y": 0.5}
+                    font_size: 18
+                    background_color: "#ff519f"
+                    foreground_color: "#ffd6e5"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
 
             # Name
             BoxLayout:
@@ -265,7 +300,66 @@ Navigator:
                     font_size: 30
                     on_press:
                         root.addNewInventory()
-                
+
+<DeleteRecord>:
+    name: "delete"
+
+    itemId: itemId
+
+    AnchorLayout:
+        GridLayout:
+            cols: 1
+            size_hint: .5, .3
+
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 100
+                Label:
+                    text: "Item ID:"
+                    size_hint: .1, .1
+                    font_size: 20
+                    bold: True
+                    pos_hint: {"center_y": 0.5}
+                    color: "#8a2038"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                TextInput:
+                    id: itemId
+                    multiline: False
+                    padding: 10, 10
+                    size_hint: None, None
+                    size: 300, 50
+                    pos_hint: {"center_y": 0.5}
+                    font_size: 18
+                    background_color: "#ff519f"
+                    foreground_color: "#ffd6e5"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+            BoxLayout:
+                size_hint: None, .01
+                width: 200
+                spacing: 20
+
+                RoundedButton:
+                    text: "Back"
+                    color: "#fccce7"
+                    size_hint: None, None
+                    size: 170, 50
+                    pos_hint: {"center_x": .5}
+                    font_size: 30
+                    on_press:
+                        root.manager.transition.direction = 'right'
+                        root.manager.current = 'home'
+
+                RoundedButton:
+                    text: "Delete"
+                    color: "#fccce7"
+                    size_hint: None, None
+                    size: 170, 50
+                    pos_hint: {"center_x": .5}
+                    font_size: 30
+                    on_press:
+                        root.deleteInventory()
 
 #ASSETS
 
@@ -280,4 +374,3 @@ Navigator:
             size: self.size
             pos: self.pos
             radius: [20]
-
