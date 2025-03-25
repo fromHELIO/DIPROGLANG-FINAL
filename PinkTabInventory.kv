@@ -1,12 +1,14 @@
 Navigator:
     LogInPage:
-        id: one 
+        id: loginpage
     HomePage:
-        id: two
+        id: homepage
     AddRecord:
-        id: three
+        id: addpage
+    EditRecord:
+        id: editpage
     DeleteRecord:
-        id: four
+        id: deletepage
 
 # SCREENS 
 
@@ -75,14 +77,6 @@ Navigator:
             on_press:
                 root.validateUser()
 
-<TestPage>:
-    name: 'new'
-    Button:
-        text: "test"
-        on_press:
-            root.manager.transition.direction = 'left'
-            root.manager.current = 'login'
-
 <HomePage>:
     name: 'home'
 
@@ -105,6 +99,9 @@ Navigator:
                 RoundedButton:
                     text: "Edit Record"
                     font_size: 28
+                    on_press:
+                        root.manager.transition.direction = 'left'
+                        root.manager.current = 'edit'
 
             BoxLayout:
                 spacing: 20
@@ -301,6 +298,236 @@ Navigator:
                     on_press:
                         root.addNewInventory()
 
+<EditRecord>:
+    name: "edit"
+
+    itemId: itemId
+    item_name: item_name
+    quantity: quantity
+    exp_date: exp_date
+    price: price
+
+    AnchorLayout:
+        GridLayout:
+            cols: 1
+            size_hint: .5, .5
+            spacing: 10
+
+            # ID
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 100
+                Label:
+                    text: "Item ID:"
+                    size_hint: .1, .1
+                    font_size: 20
+                    bold: True
+                    pos_hint: {"center_y": 0.5}
+                    color: "#8a2038"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                TextInput:
+                    id: itemId
+                    hint_text: "5 letters, all characters"
+                    hint_text_color: "#e3b3c5"
+                    multiline: False
+                    padding: 10, 10
+                    size_hint: None, None
+                    size: 300, 50
+                    pos_hint: {"center_y": 0.5}
+                    font_size: 18
+                    background_color: "#ff519f"
+                    foreground_color: "#ffd6e5"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+            # Name
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 75
+
+                Label:
+                    text: "Item name:"
+                    size_hint: .1, .1
+                    font_size: 20
+                    bold: True
+                    pos_hint: {"center_y": 0.5}
+                    color: "#8a2038"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    spacing: 20
+
+                    TextInput:
+                        id: item_name
+                        multiline: False
+                        padding: 10, 10
+                        size_hint: None, None
+                        size: 180, 50
+                        pos_hint: {"center_y": 0.5}
+                        font_size: 18
+                        background_color: "#ff519f"
+                        foreground_color: "#ffd6e5"
+                        font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                    LessRoundedButton:
+                        text: "Change"
+                        padding: 50
+                        color: "#fccce7"
+                        background_normal: ""
+                        size_hint: None, None
+                        size: 100, 50
+                        pos_hint: {"center_y": .5}
+                        font_size: 20
+                        on_press:
+                            root.editName()
+            
+            #Quantity
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 75
+
+                Label:
+                    text: "Quantity:"
+                    size_hint: .1, .1
+                    font_size: 20
+                    bold: True
+                    pos_hint: {"center_y": 0.5}
+                    color: "#8a2038"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    spacing: 20
+
+                    TextInput:
+                        id: quantity
+                        multiline: False
+                        padding: 10, 10
+                        size_hint: None, None
+                        size: 180, 50
+                        pos_hint: {"center_y": 0.5}
+                        font_size: 18
+                        background_color: "#ff519f"
+                        foreground_color: "#ffd6e5"
+                        font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                    LessRoundedButton:
+                        text: "Change"
+                        padding: 50
+                        color: "#fccce7"
+                        background_normal: ""
+                        size_hint: None, None
+                        size: 100, 50
+                        pos_hint: {"center_y": .5}
+                        font_size: 20
+                        on_press:
+                            root.editQuantity()
+            
+            #Expiration Date
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 75
+
+                Label:
+                    text: "Expiration Date:"
+                    size_hint: .1, .1
+                    font_size: 20
+                    bold: True
+                    pos_hint: {"center_y": 0.5}
+                    color: "#8a2038"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    spacing: 20
+
+                    TextInput:
+                        id: exp_date
+                        hint_text: "(YYYY-MM-DD)"
+                        hint_text_color: "#e3b3c5"
+                        multiline: False
+                        padding: 10, 10
+                        size_hint: None, None
+                        size: 180, 50
+                        pos_hint: {"center_y": 0.5}
+                        font_size: 18
+                        background_color: "#ff519f"
+                        foreground_color: "#ffd6e5"
+                        font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                    LessRoundedButton:
+                        text: "Change"
+                        padding: 50
+                        color: "#fccce7"
+                        background_normal: ""
+                        size_hint: None, None
+                        size: 100, 50
+                        pos_hint: {"center_y": .5}
+                        font_size: 20
+                        on_press:
+                            root.editExpDate()
+            
+            #Price
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 75
+
+                Label:
+                    text: "Price:"
+                    size_hint: .1, .1
+                    font_size: 20
+                    bold: True
+                    pos_hint: {"center_y": 0.5}
+                    color: "#8a2038"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    spacing: 20
+
+                    TextInput:
+                        id: price
+                        multiline: False
+                        padding: 10, 10
+                        size_hint: None, None
+                        size: 180, 50
+                        pos_hint: {"center_y": 0.5}
+                        font_size: 18
+                        background_color: "#ff519f"
+                        foreground_color: "#ffd6e5"
+                        font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                    LessRoundedButton:
+                        text: "Change"
+                        padding: 50
+                        color: "#fccce7"
+                        background_normal: ""
+                        size_hint: None, None
+                        size: 100, 50
+                        pos_hint: {"center_y": .5}
+                        font_size: 20
+                        on_press:
+                            root.editPrice()
+                
+            BoxLayout:
+                size_hint: None, 1
+                width: 200
+                padding: 90, 0, 0, 0
+                spacing: 20
+
+                RoundedButton:
+                    text: "Back"
+                    color: "#fccce7"
+                    size_hint: None, None
+                    size: 170, 50
+                    pos_hint: {"center_x": .5}
+                    font_size: 30
+                    on_press:
+                        root.manager.transition.direction = 'right'
+                        root.manager.current = 'home'
+    
+
 <DeleteRecord>:
     name: "delete"
 
@@ -374,3 +601,15 @@ Navigator:
             size: self.size
             pos: self.pos
             radius: [20]
+
+<LessRoundedButton@Button>:
+    background_color: 0, 0, 0, 0
+    background_normal: ""
+    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+    canvas.before:
+        Color:
+            rgba: (156/255, 34/255, 69/255, 1)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [10]
