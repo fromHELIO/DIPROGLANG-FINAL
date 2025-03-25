@@ -30,79 +30,107 @@ pinkTab = mysql.connector.connect(host="localhost", user="root", password="", da
 
 cursor = pinkTab.cursor()
 
-# main
+# main file
 
 Window.clearcolor = "#fccce7"
 
 class PinkTabInventory(App):
+    """Main app builder"""
     def build(self):
         Builder.load_file('PinkTabInventory.kv')
 
 class Navigator(ScreenManager):
-    pass
-
-class TestPage(Screen):
+    """For switching screens"""
     pass
 
 class LogInPage(BoxLayout, Screen):
-
+    """User log in screen"""
     emp_id = ObjectProperty(None)
     password = ObjectProperty(None)
 
     def validateUser(self):
+        """Checks if the user is a valid employee."""
         emp_id = self.emp_id.text
         password = self.password.text
         cursor.execute("SELECT id FROM employee")
         users = [x for i in cursor.fetchall() for x in i]
         
-        
         if emp_id in users:
             cursor.execute(f"SELECT emp_pass FROM employee WHERE id={emp_id}")
             user_pass = ''.join([str(x) for i in cursor.fetchall() for x in i])
+
             if password == user_pass:
+                #add to access log
+                cursor.execute(f"INSERT INTO access_log(employee_id) VALUES({emp_id})")
+                #move to home screen
                 self.manager.transition.direction = "left"
                 self.manager.current = "home"
-        
-    def getEmpId(self):
-        return self.emp_id.text
 
+# get current user's id
+
+def getEmpId():
+        """Get Employee Information of current session. 1 to retrieve ID, 2 for first name."""
+        cursor.execute("SELECT employee_id FROM access_log WHERE id = (SELECT MAX(id) FROM access_log)")
+        results = cursor.fetchall()[0][0]
+        return results
+
+# main screens
 
 class HomePage(Screen):
+    """Home naviagtion page"""
     def endApp(self, *args):
+        """Closes the"""
         PinkTabInventory.stop()
         Window.close()
 
 class AddRecord(Screen):
+    """Screen for adding a new inventory item"""
     def addNewInventory(self):
+        """adds new item to the database"""
         name = self.item_name.text
         quantity = self.quantity.text
         exp_date = self.exp_date.text
         price = self.price.text
 
-        try:
+        try: #checks if quantity is a number
             int(quantity)
         except ValueError:
-            popup = Popup(title='Test popup', content=Label(text='Please input a whole number.'), size_hint=(None, None), size=(400, 200))
+            popup = Popup(
+                title='Incorrect Quantity',
+                content=Label(text='Please input a whole number.'),
+                size_hint=(None, None), 
+                size=(400, 200)
+                )
+            
             popup.open()
         else:
-            try:
+            try: #checks if price is a float
                 float(price)
             except ValueError:
-                popup = Popup(title='Test popup', content=Label(text='Please input an whole or decimal number.'), size_hint=(None, None), size=(400, 200))
+                popup = Popup(title='Invalid Price', content=Label(text='Please input an whole or decimal number.'), size_hint=(None, None), size=(400, 200))
                 popup.open()
             else:
-                try:
+                try: #checks if date is valid
                     self.dateError(exp_date)
                 except:
-                    popup = Popup(title='Test popup', content=Label(text='Please input a valid date.'), size_hint=(None, None), size=(400, 200))
+                    popup = Popup(title='Invalid Date', content=Label(text='Please use the YYYY-MM-DD format.'), size_hint=(None, None), size=(400, 200))
                     popup.open()
                 else:
+                    #insert into inventory
                     cursor.execute(f"INSERT INTO inventory(name, quantity, exp_date, price) VALUES ('{name}', {quantity}, '{exp_date}', {price});")
 
+                    #insert to changelog
+                    cursor.execute(f"SELECT max(id) FROM inventory")
+                    new_item = cursor.fetchall()[0][0]
+
+                    cursor.execute(f"INSERT INTO change_log(employee_id, inventory_id, change_type) VALUES({getEmpId()}, {new_item}, 'ADDED INVENTORY')")
+
+                    # sucess popup
                     popup = Popup(title='Success!', content=Label(text='The item has been added to the database.'), size_hint=(None, None), size=(400, 200))
                     popup.open()
     
     def dateError(self, date):
+        """Tests if date string is valid"""
         testDate = date.split('-')
         if len(testDate) != 3:
             raise Exception()
@@ -114,9 +142,6 @@ class AddRecord(Screen):
             if not(int(testDate[2]) in range(1, 32)):
                 raise Exception()
                     
-            
-                
-        
 PinkTabInventory().run()
 # close db
 pinkTab.close
