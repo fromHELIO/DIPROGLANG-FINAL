@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2025 at 06:07 AM
+-- Generation Time: Mar 25, 2025 at 12:37 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -38,7 +38,17 @@ CREATE TABLE `access_log` (
 --
 
 INSERT INTO `access_log` (`id`, `employee_id`, `access_timestamp`) VALUES
-(1, '202503002', '2025-03-25 12:58:57');
+(1, '202503002', '2025-03-25 12:58:57'),
+(2, '202503001', '2025-03-25 16:36:40'),
+(3, '202503002', '2025-03-25 16:59:53'),
+(4, '1', '2025-03-25 17:01:10'),
+(5, '1', '2025-03-25 17:03:19'),
+(6, '202503001', '2025-03-25 17:03:33'),
+(7, '202503001', '2025-03-25 17:09:18'),
+(8, '1', '2025-03-25 17:09:24'),
+(9, '1', '2025-03-25 17:30:58'),
+(10, '202503001', '2025-03-25 17:34:09'),
+(11, '202503002', '2025-03-25 17:37:26');
 
 -- --------------------------------------------------------
 
@@ -49,8 +59,7 @@ INSERT INTO `access_log` (`id`, `employee_id`, `access_timestamp`) VALUES
 CREATE TABLE `change_log` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `employee_id` varchar(9) DEFAULT NULL,
-  `inventory_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `change_type` enum('ADDED INVENTORY','UPDATED INVENTORY','DELETED INVENTORY') DEFAULT NULL,
+  `change_type` varchar(60) DEFAULT NULL,
   `change_timestamp` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -58,8 +67,16 @@ CREATE TABLE `change_log` (
 -- Dumping data for table `change_log`
 --
 
-INSERT INTO `change_log` (`id`, `employee_id`, `inventory_id`, `change_type`, `change_timestamp`) VALUES
-(2, '202503002', 1, 'ADDED INVENTORY', '2025-03-25 13:07:05');
+INSERT INTO `change_log` (`id`, `employee_id`, `change_type`, `change_timestamp`) VALUES
+(1, '202503002', 'ADDED INVENTORY BFORA - Berry Fun Orange', '2025-03-25 19:15:24'),
+(2, '202503002', 'ADDED INVENTORY SCLEM - Super Citric Lemon', '2025-03-25 19:15:53'),
+(3, '202503002', 'ADDED INVENTORY SCLEM - Piltover Special HexSoda', '2025-03-25 19:17:19'),
+(4, '202503002', 'ADDED INVENTORY TESTS - test', '2025-03-25 19:20:29'),
+(5, '202503002', 'DELETED INVENTORY TESTS - test', '2025-03-25 19:26:24'),
+(6, '202503002', 'DELETED INVENTORY SCLEM - Super Citric Lemon', '2025-03-25 19:27:45'),
+(7, '202503002', 'DELETED INVENTORY BFORA - Berry Fun Orange', '2025-03-25 19:33:51'),
+(8, '202503002', 'ADDED INVENTORY PSHXS - Magnetic Magic Cherry', '2025-03-25 19:36:25'),
+(9, '202503002', 'DELETED INVENTORY MMCHR - Magnetic Magic Cherry', '2025-03-25 19:36:40');
 
 -- --------------------------------------------------------
 
@@ -82,7 +99,7 @@ INSERT INTO `employee` (`id`, `first_name`, `last_name`, `emp_pass`) VALUES
 ('1', 'Test', 'User', '123'),
 ('202503001', 'Jayce', 'Talis', 'Cr4nk17'),
 ('202503002', 'Viktor', 'Novak', 'inallpossibilities'),
-('202503003', 'Caitlyn', 'Kiramman', '4olet');
+('202503003', 'Caitlyn', 'Kiramman', '6olet');
 
 -- --------------------------------------------------------
 
@@ -91,7 +108,7 @@ INSERT INTO `employee` (`id`, `first_name`, `last_name`, `emp_pass`) VALUES
 --
 
 CREATE TABLE `inventory` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` varchar(5) NOT NULL,
   `name` varchar(60) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `exp_date` date DEFAULT NULL,
@@ -103,9 +120,30 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`id`, `name`, `quantity`, `exp_date`, `price`) VALUES
-(1, 'Sample Soda', 199, '0000-00-00', 200.99),
-(2, 'Berry Fun Grape', 199, '2025-09-09', 50.97),
-(3, 'Citric Surprice Orange', 327, '2025-09-08', 75.40);
+('PSHXS', 'Piltover Special HexSoda', 50, '2025-09-30', 149.99);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `test`
+--
+
+CREATE TABLE `test` (
+  `testnum` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `test`
+--
+
+INSERT INTO `test` (`testnum`) VALUES
+(2),
+(3),
+(4),
+(5),
+(5),
+(5),
+(515);
 
 --
 -- Indexes for dumped tables
@@ -123,8 +161,7 @@ ALTER TABLE `access_log`
 --
 ALTER TABLE `change_log`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `employee_id` (`employee_id`),
-  ADD KEY `inventory_id` (`inventory_id`);
+  ADD KEY `employee_id` (`employee_id`);
 
 --
 -- Indexes for table `employee`
@@ -137,8 +174,7 @@ ALTER TABLE `employee`
 -- Indexes for table `inventory`
 --
 ALTER TABLE `inventory`
-  ADD PRIMARY KEY (`id`) USING BTREE,
-  ADD UNIQUE KEY `id` (`id`);
+  ADD PRIMARY KEY (`id`) USING BTREE;
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -148,19 +184,13 @@ ALTER TABLE `inventory`
 -- AUTO_INCREMENT for table `access_log`
 --
 ALTER TABLE `access_log`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `change_log`
 --
 ALTER TABLE `change_log`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `inventory`
---
-ALTER TABLE `inventory`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
@@ -176,8 +206,7 @@ ALTER TABLE `access_log`
 -- Constraints for table `change_log`
 --
 ALTER TABLE `change_log`
-  ADD CONSTRAINT `change_log_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`),
-  ADD CONSTRAINT `change_log_ibfk_2` FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`id`);
+  ADD CONSTRAINT `change_log_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
