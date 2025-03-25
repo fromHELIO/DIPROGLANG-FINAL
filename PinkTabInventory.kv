@@ -1,0 +1,289 @@
+Navigator:
+#    LogInPage:
+#        id: one 
+#    TestPage:
+#        id: three  
+    HomePage:
+        id: two
+    AddRecord:
+        id: four
+
+# SCREENS 
+
+<LogInPage>:
+    name: 'login'
+
+    emp_id: emp_id
+    password: password
+
+    orientation: "vertical"
+    padding: 50, 50, 50, 200
+    spacing: 20
+
+    Image:
+        source: "images/PinkTab_textLogo.png"
+    
+    Label:
+        text: "Employee ID:"
+        size_hint: .1, .1
+        font_size: 20
+        bold: True
+        pos_hint: {"x": .05}
+        color: "#8a2038"
+        font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+    
+    TextInput:
+        id: emp_id
+        multiline: False
+        padding: 10, 10
+        size_hint: 1, .15
+        font_size: 18
+        background_color: "#ff519f"
+        foreground_color: "#ffd6e5"
+        font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+    Label:
+        text: "Password:"
+        size_hint: .1, .1
+        font_size: 20
+        bold: True
+        pos_hint: {"x": .05}
+        color: "#8a2038"
+        font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+    
+    TextInput:
+        id: password
+        multiline: False
+        padding: 10, 10
+        size_hint: 1, .15
+        font_size: 18
+        background_color: "#ff519f"
+        foreground_color: "#ffd6e5"
+        font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF" 
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: 0, 30, 0, 0
+        size_hint: .5, .3
+        pos_hint: {"center_x": .5}
+        RoundedButton:
+            text: "Log In"
+            color: "#fccce7"
+            #background_color: "#9c2245"
+            #background_normal: ""
+            size_hint: (.5, .2)
+            pos_hint: {"center_x": .5}
+            font_size: 30
+            on_press:
+                root.validateUser()
+
+<TestPage>:
+    name: 'new'
+    Button:
+        text: "test"
+        on_press:
+            root.manager.transition.direction = 'left'
+            root.manager.current = 'login'
+
+<HomePage>:
+    name: 'home'
+
+    AnchorLayout:
+        GridLayout:
+            cols: 1
+            spacing: 20
+            size_hint: None, None
+            size: 400, 400
+            BoxLayout:
+                spacing: 20
+                orientation: "horizontal"
+                RoundedButton:
+                    text: "Add Record"
+                    font_size: 30
+                    on_press:
+                        root.manager.transition.direction = 'left'
+                        root.manager.current = 'add'
+                RoundedButton:
+                    text: "Edit Record"
+                    font_size: 28
+            BoxLayout:
+                spacing: 20
+                orientation: "horizontal"
+                RoundedButton:
+                    text: "Delete Record"
+                    font_size: 26
+                RoundedButton:
+                    text: "Show Report"
+                    font_size: 28
+            BoxLayout:
+                spacing: 20
+                orientation: "horizontal"
+                RoundedButton:
+                    text: "Close"
+                    font_size: 40
+                    on_press:
+                        root.endApp()
+
+<AddRecord>:
+    name: "add"
+
+    item_name: item_name
+    quantity: quantity
+    exp_date: exp_date
+    price: price
+
+    AnchorLayout:
+        GridLayout:
+            cols: 1
+            size_hint: .5, .5
+            spacing: 10
+
+            # Name
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 100
+                Label:
+                    text: "Item name:"
+                    size_hint: .1, .1
+                    font_size: 20
+                    bold: True
+                    pos_hint: {"center_y": 0.5}
+                    color: "#8a2038"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                TextInput:
+                    id: item_name
+                    multiline: False
+                    padding: 10, 10
+                    size_hint: None, None
+                    size: 300, 50
+                    pos_hint: {"center_y": 0.5}
+                    font_size: 18
+                    background_color: "#ff519f"
+                    foreground_color: "#ffd6e5"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+            
+            #Quantity
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 100
+                Label:
+                    text: "Quantity:"
+                    size_hint: .1, .1
+                    font_size: 20
+                    bold: True
+                    pos_hint: {"center_y": 0.5}
+                    color: "#8a2038"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                TextInput:
+                    id: quantity
+                    pos_hint: {"center_x": .5}
+                    multiline: False
+                    padding: 10, 10
+                    size_hint: None, None
+                    size: 300, 50
+                    pos_hint: {"center_y": 0.5}
+                    font_size: 18
+                    background_color: "#ff519f"
+                    foreground_color: "#ffd6e5"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+            
+            #Expiration Date
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 100
+                Label:
+                    text: "Expiration Date:"
+                    size_hint: .1, .1
+                    font_size: 20
+                    bold: True
+                    pos_hint: {"center_y": 0.5}
+                    color: "#8a2038"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                TextInput:
+                    id: exp_date
+                    hint_text: "(YYYY-MM-DD)"
+                    hint_text_color: "#e3b3c5"
+                    pos_hint: {"center_x": .5}
+                    multiline: False
+                    padding: 10, 10
+                    size_hint: None, None
+                    size: 300, 50
+                    pos_hint: {"center_y": 0.5}
+                    font_size: 18
+                    background_color: "#ff519f"
+                    foreground_color: "#ffd6e5"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+            
+            #Price
+            BoxLayout:
+                orientation: "horizontal"
+                spacing: 100
+                Label:
+                    text: "Price:"
+                    size_hint: .1, .1
+                    bold: True
+                    pos_hint: {"center_y": 0.5}
+                    color: "#8a2038"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+                TextInput:
+                    id: price
+                    pos_hint: {"center_x": .5}
+                    multiline: False
+                    padding: 10, 10
+                    size_hint: None, None
+                    size: 300, 50
+                    pos_hint: {"center_y": 0.5}
+                    font_size: 18
+                    background_color: "#ff519f"
+                    foreground_color: "#ffd6e5"
+                    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+            
+            #Submit and Back
+            BoxLayout:
+                size_hint: None, 1
+                width: 200
+                spacing: 20
+
+                RoundedButton:
+                    text: "Back"
+                    color: "#fccce7"
+                    size_hint: None, None
+                    size: 170, 50
+                    pos_hint: {"center_x": .5}
+                    font_size: 30
+                    on_press:
+                        root.manager.transition.direction = 'right'
+                        root.manager.current = 'home'
+
+                RoundedButton:
+                    text: "Submit"
+                    color: "#fccce7"
+                    size_hint: None, None
+                    size: 170, 50
+                    pos_hint: {"center_x": .5}
+                    font_size: 30
+                    on_press:
+                        root.addNewInventory()
+                
+
+#ASSETS
+
+<RoundedButton@Button>:
+    background_color: 0, 0, 0, 0
+    background_normal: ""
+    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+    canvas.before:
+        Color:
+            rgba: (156/255, 34/255, 69/255, 1)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [20]
+
+<ErrorMessage@Popup>:
+    background_color: 
+
