@@ -1,12 +1,10 @@
 Navigator:
-#    LogInPage:
-#        id: one 
-#    TestPage:
-#        id: three  
+    LogInPage:
+        id: one 
     HomePage:
         id: two
     AddRecord:
-        id: four
+        id: three
 
 # SCREENS 
 
@@ -69,8 +67,6 @@ Navigator:
         RoundedButton:
             text: "Log In"
             color: "#fccce7"
-            #background_color: "#9c2245"
-            #background_normal: ""
             size_hint: (.5, .2)
             pos_hint: {"center_x": .5}
             font_size: 30
@@ -94,6 +90,7 @@ Navigator:
             spacing: 20
             size_hint: None, None
             size: 400, 400
+
             BoxLayout:
                 spacing: 20
                 orientation: "horizontal"
@@ -283,7 +280,4 @@ Navigator:
             size: self.size
             pos: self.pos
             radius: [20]
-
-<ErrorMessage@Popup>:
-    background_color: 
 
