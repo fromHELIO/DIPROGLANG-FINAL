@@ -9,6 +9,9 @@ Navigator:
         id: editpage
     DeleteRecord:
         id: deletepage
+    ShowReport:
+        id: reportpage
+
 
 # SCREENS 
 
@@ -18,64 +21,65 @@ Navigator:
     emp_id: emp_id
     password: password
 
-    orientation: "vertical"
-    padding: 50, 50, 50, 200
-    spacing: 20
-
-    Image:
-        source: "images/PinkTab_textLogo.png"
-    
-    Label:
-        text: "Employee ID:"
-        size_hint: .1, .1
-        font_size: 20
-        bold: True
-        pos_hint: {"x": .05}
-        color: "#8a2038"
-        font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
-    
-    TextInput:
-        id: emp_id
-        multiline: False
-        padding: 10, 10
-        size_hint: 1, .15
-        font_size: 18
-        background_color: "#ff519f"
-        foreground_color: "#ffd6e5"
-        font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
-
-    Label:
-        text: "Password:"
-        size_hint: .1, .1
-        font_size: 20
-        bold: True
-        pos_hint: {"x": .05}
-        color: "#8a2038"
-        font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
-    
-    TextInput:
-        id: password
-        multiline: False
-        padding: 10, 10
-        size_hint: 1, .15
-        font_size: 18
-        background_color: "#ff519f"
-        foreground_color: "#ffd6e5"
-        font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF" 
-
     BoxLayout:
         orientation: "vertical"
-        padding: 0, 30, 0, 0
-        size_hint: .5, .3
-        pos_hint: {"center_x": .5}
-        RoundedButton:
-            text: "Log In"
-            color: "#fccce7"
-            size_hint: (.5, .2)
+        padding: 50, 50, 50, 200
+        spacing: 20
+
+        Image:
+            source: "images/PinkTab_textLogo.png"
+        
+        Label:
+            text: "Employee ID:"
+            size_hint: .1, .1
+            font_size: 20
+            bold: True
+            pos_hint: {"x": .05}
+            color: "#8a2038"
+            font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+        
+        TextInput:
+            id: emp_id
+            multiline: False
+            padding: 10, 10
+            size_hint: 1, .15
+            font_size: 18
+            background_color: "#ff519f"
+            foreground_color: "#ffd6e5"
+            font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+        Label:
+            text: "Password:"
+            size_hint: .1, .1
+            font_size: 20
+            bold: True
+            pos_hint: {"x": .05}
+            color: "#8a2038"
+            font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+        
+        TextInput:
+            id: password
+            multiline: False
+            padding: 10, 10
+            size_hint: 1, .15
+            font_size: 18
+            background_color: "#ff519f"
+            foreground_color: "#ffd6e5"
+            font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF" 
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: 0, 30, 0, 0
+            size_hint: .5, .3
             pos_hint: {"center_x": .5}
-            font_size: 30
-            on_press:
-                root.validateUser()
+            RoundedButton:
+                text: "Log In"
+                color: "#fccce7"
+                size_hint: (.5, .2)
+                pos_hint: {"center_x": .5}
+                font_size: 30
+                on_press:
+                    root.validateUser()
 
 <HomePage>:
     name: 'home'
@@ -115,6 +119,9 @@ Navigator:
                 RoundedButton:
                     text: "Show Report"
                     font_size: 28
+                    on_press:
+                        root.manager.transition.direction = 'left'
+                        root.manager.current = 'show'
 
             BoxLayout:
                 spacing: 20
@@ -526,7 +533,6 @@ Navigator:
                     on_press:
                         root.manager.transition.direction = 'right'
                         root.manager.current = 'home'
-    
 
 <DeleteRecord>:
     name: "delete"
@@ -588,9 +594,34 @@ Navigator:
                     on_press:
                         root.deleteInventory()
 
+<ShowReport>:
+    name: "show"
+    on_pre_enter: root.display()
+
+    invHolder: invHolder
+
+    AnchorLayout:
+        GridLayout:
+            cols: 1
+            spacing: 20
+            size_hint: .9, .7
+
+            BoxLayout:
+                id: invHolder
+                orientation: "vertical"
+                spacing: 20
+
 #ASSETS
 
-<RoundedButton@Button>:
+<CustomLabel>:
+    size_hint: .1, .1
+    font_size: 20
+    bold: True
+    pos_hint: {"center_y": 0.5, "center_x": 0.5}
+    color: "#8a2038"
+    font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
+
+<RoundedButton>:
     background_color: 0, 0, 0, 0
     background_normal: ""
     font_name: "C:\\WINDOWS\\FONTS\\BAHNSCHRIFT.TTF"
