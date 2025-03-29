@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2025 at 02:49 PM
+-- Generation Time: Mar 29, 2025 at 10:22 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -33,23 +33,6 @@ CREATE TABLE `access_log` (
   `access_timestamp` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `access_log`
---
-
-INSERT INTO `access_log` (`id`, `employee_id`, `access_timestamp`) VALUES
-(1, '202503002', '2025-03-25 12:58:57'),
-(2, '202503001', '2025-03-25 16:36:40'),
-(3, '202503002', '2025-03-25 16:59:53'),
-(4, '1', '2025-03-25 17:01:10'),
-(5, '1', '2025-03-25 17:03:19'),
-(6, '202503001', '2025-03-25 17:03:33'),
-(7, '202503001', '2025-03-25 17:09:18'),
-(8, '1', '2025-03-25 17:09:24'),
-(9, '1', '2025-03-25 17:30:58'),
-(10, '202503001', '2025-03-25 17:34:09'),
-(11, '202503002', '2025-03-25 17:37:26');
-
 -- --------------------------------------------------------
 
 --
@@ -62,27 +45,6 @@ CREATE TABLE `change_log` (
   `change_info` varchar(60) DEFAULT NULL,
   `change_timestamp` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `change_log`
---
-
-INSERT INTO `change_log` (`id`, `employee_id`, `change_info`, `change_timestamp`) VALUES
-(1, '202503002', 'ADDED INVENTORY BFORA - Berry Fun Orange', '2025-03-25 19:15:24'),
-(2, '202503002', 'ADDED INVENTORY SCLEM - Super Citric Lemon', '2025-03-25 19:15:53'),
-(3, '202503002', 'ADDED INVENTORY SCLEM - Piltover Special HexSoda', '2025-03-25 19:17:19'),
-(4, '202503002', 'ADDED INVENTORY TESTS - test', '2025-03-25 19:20:29'),
-(5, '202503002', 'DELETED INVENTORY TESTS - test', '2025-03-25 19:26:24'),
-(6, '202503002', 'DELETED INVENTORY SCLEM - Super Citric Lemon', '2025-03-25 19:27:45'),
-(7, '202503002', 'DELETED INVENTORY BFORA - Berry Fun Orange', '2025-03-25 19:33:51'),
-(8, '202503002', 'ADDED INVENTORY PSHXS - Magnetic Magic Cherry', '2025-03-25 19:36:25'),
-(9, '202503002', 'DELETED INVENTORY MMCHR - Magnetic Magic Cherry', '2025-03-25 19:36:40'),
-(10, '202503002', 'EDITED INVENTORY FFTET NAME TO i love you viktor', '2025-03-25 21:26:01'),
-(11, '202503002', 'EDITED INVENTORY FFTET NAME TO 180', '2025-03-25 21:42:59'),
-(12, '202503002', 'EDITED INVENTORY FFTET NAME TO i love you viktor', '2025-03-25 21:43:19'),
-(13, '202503002', 'EDITED INVENTORY FFTET QUANTITY TO 420', '2025-03-25 21:43:20'),
-(14, '202503002', 'EDITED INVENTORY FFTET PRICE TO 999.99', '2025-03-25 21:46:16'),
-(15, '202503002', 'EDITED INVENTORY FFTET EXPIRATION DATE TO 2025-01-19', '2025-03-25 21:48:04');
 
 -- --------------------------------------------------------
 
@@ -102,10 +64,8 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`id`, `first_name`, `last_name`, `emp_pass`) VALUES
-('1', 'Test', 'User', '123'),
-('202503001', 'Jayce', 'Talis', 'Cr4nk17'),
-('202503002', 'Viktor', 'Novak', 'inallpossibilities'),
-('202503003', 'Caitlyn', 'Kiramman', '6olet');
+('202500001', 'Test', 'User', '123'),
+('202500002', 'Test', 'Two', '123');
 
 -- --------------------------------------------------------
 
@@ -126,31 +86,7 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`id`, `name`, `quantity`, `exp_date`, `price`) VALUES
-('FFTET', 'i love you viktor', 420, '2025-01-19', 999.99),
-('PSHXS', 'Piltover Special HexSoda', 50, '2025-09-30', 149.99);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `test`
---
-
-CREATE TABLE `test` (
-  `testnum` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `test`
---
-
-INSERT INTO `test` (`testnum`) VALUES
-(2),
-(3),
-(4),
-(5),
-(5),
-(5),
-(515);
+('SMPSD', 'Sample Soda', 199, '2025-10-23', 99.99);
 
 --
 -- Indexes for dumped tables
@@ -191,13 +127,13 @@ ALTER TABLE `inventory`
 -- AUTO_INCREMENT for table `access_log`
 --
 ALTER TABLE `access_log`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `change_log`
 --
 ALTER TABLE `change_log`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Constraints for dumped tables
