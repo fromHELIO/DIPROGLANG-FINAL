@@ -6,8 +6,10 @@ Config.set('graphics', 'width', '550')
 Config.set('graphics', 'height', '700')
 
 #kivy imports
-from kivy.app import App
+from kivymd.app import MDApp
 from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.properties import ObjectProperty
 
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.anchorlayout import AnchorLayout
@@ -18,32 +20,49 @@ from kivy.uix.image import Image
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.popup import Popup
-from kivy.core.window import Window
-from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.properties import ObjectProperty
+from kivymd.uix.datatables import MDDataTable
 
-#sql server connection
+from kivy.metrics import dp
+
+# general imports
 
 import mysql.connector
+import datetime as dt
+from sys import exit
 
+#sql server connection
 pinkTab = mysql.connector.connect(host="localhost", user="root", password="", database="pink_tab", autocommit=True)
-
 cursor = pinkTab.cursor()
 
-# main file
+# main process
 
-Window.clearcolor = "#fccce7"
+# general functions
+def getEmpId():
+    """Get Employee Information of current session. 1 to retrieve ID, 2 for first name."""
+    cursor.execute("SELECT employee_id FROM access_log WHERE id = (SELECT MAX(id) FROM access_log)")
+    results = cursor.fetchall()[0][0]
+    return results
 
-class PinkTabInventory(App):
+def getInventory():
+    """Get the data of the inventory table"""
+    cursor.execute("SELECT * FROM inventory")
+    results = cursor.fetchall()
+    return results
+
+# App
+class PinkTabInventory(MDApp):
     """Main app builder"""
     def build(self):
         Builder.load_file('PinkTabInventory.kv')
+        self.theme_cls.primary_palette = "Teal"
 
 class Navigator(ScreenManager):
     """For switching screens"""
     pass
 
-class LogInPage(BoxLayout, Screen):
+# main screens
+
+class LogInPage(Screen):
     """User log in screen"""
     emp_id = ObjectProperty(None)
     password = ObjectProperty(None)
@@ -66,22 +85,11 @@ class LogInPage(BoxLayout, Screen):
                 self.manager.transition.direction = "left"
                 self.manager.current = "home"
 
-# get current user's id
-
-def getEmpId():
-        """Get Employee Information of current session. 1 to retrieve ID, 2 for first name."""
-        cursor.execute("SELECT employee_id FROM access_log WHERE id = (SELECT MAX(id) FROM access_log)")
-        results = cursor.fetchall()[0][0]
-        return results
-
-# main screens
-
 class HomePage(Screen):
     """Home naviagtion page"""
-    def endApp(self, *args):
+    def endApp(self):
         """Closes the app"""
-        PinkTabInventory.stop()
-        Window.close()
+        exit(0)
 
 class AddRecord(Screen):
     """Screen for adding a new inventory record"""
@@ -114,7 +122,7 @@ class AddRecord(Screen):
                     try: #checks if date is valid
                         self.dateError(exp_date)
                     except:
-                        popup = Popup(title='Invalid Date', content=Label(text='Please use the YYYY-MM-DD format.'), size_hint=(None, None), size=(400, 200))
+                        popup = Popup(title='Invalid Date', content=Label(text='Please enter a valid (YYYY-MM-DD).'), size_hint=(None, None), size=(400, 200))
                         popup.open()
                     else:
                         #insert into inventory
@@ -144,19 +152,17 @@ class AddRecord(Screen):
         else:
             if len(testDate[0]) != 4:
                 raise Exception()
+            
             if not(int(testDate[1]) in range(1, 13)):
                 raise Exception()
+            
             if not(int(testDate[2]) in range(1, 32)):
+                raise Exception()
+            elif int(testDate[2]) == 31 and int(testDate[1]) in [2, 4, 6, 9, 11]:
                 raise Exception()
 
 class EditRecord(Screen):
     """Screen for editing selected inventory"""
-
-    # itemId = (self.itemId.text).upper()
-    # name = self.item_name.text
-    # quantity = self.quantity.text
-    # exp_date = self.exp_date.text
-    # price = self.price.text
 
     def editName(self):
         """Edit selected inventory's name"""
@@ -226,7 +232,7 @@ class EditRecord(Screen):
             try: #checks if date is valid
                 self.dateError(exp_date)
             except:
-                popup = Popup(title='Invalid Date', content=Label(text='Please use the YYYY-MM-DD format.'), size_hint=(None, None), size=(400, 200))
+                popup = Popup(title='Invalid Date', content=Label(text='Please enter a valid date (YYYY-MM-DD).'), size_hint=(None, None), size=(400, 200))
                 popup.open()
             else:
                 #update record
@@ -288,9 +294,14 @@ class EditRecord(Screen):
         else:
             if len(testDate[0]) != 4:
                 raise Exception()
+            
             if not(int(testDate[1]) in range(1, 13)):
                 raise Exception()
+            
             if not(int(testDate[2]) in range(1, 32)):
+                raise Exception()
+            
+            elif int(testDate[2]) == 31 and int(testDate[1]) in [2, 4, 6, 9, 11]:
                 raise Exception()
 
 class DeleteRecord(Screen):
@@ -323,8 +334,103 @@ class DeleteRecord(Screen):
         print(result)
         if len(result) == 0:
             raise Exception()
-                
+            
+class ShowReport(Screen):
+    """Screen for showing report of inventory"""
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        # get current date
+        results = getInventory()
+
+        #calculate total quantity
+        self.totalQuantity = 0
+        quantities = [i[2] for i in results]
+        for i in quantities:
+            self.totalQuantity += i
+    
+    def display(self):
+        """Display widgets to screen"""
+        inventory = Inventory()
+        backButton = RoundedButton(
+            text = "Back",
+            color = "#fccce7",
+            size_hint = (None, None),
+            size = (170, 50),
+            pos_hint = {"center_x": .5, "center_y": .5},
+            font_size = 30,
+            on_press = lambda x:self.goHome()
+        )
+        self.invHolder.add_widget(CustomLabel(text=f"Total Inventory: {self.totalQuantity}", font_size=30))
+        self.invHolder.add_widget(inventory)
+        self.invHolder.add_widget(backButton)
+    
+    def goHome(self):
+        """Return to home screen"""
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'home'
+        self.invHolder.clear_widgets()
+
+#assets
+
+class Inventory(MDDataTable):
+    """Widget for showing database's inventoyr table"""
+    today = dt.date.today()
+
+    def checkExpiry(current, item_expd):
+        """Check if item is expired"""
+        if current>=item_expd:
+            status = "Expired"
+        elif (item_expd-current).days < 60:
+            status = "Near expiry"
+        else:
+            status = "Safe"
         
+        return status
+
+    def checkRestock(item_qnt):
+        """Check if item needs to be restocked"""
+        if item_qnt < 100:
+            neededStock = 100 - item_qnt
+            status = f"Restock {neededStock}"
+        else:
+            status = "Stocked"
+        
+        return status
+    
+    # design settings
+    size_hint = (.90, .55)
+    pos_hint = {"center_y": 0.5, "center_x": 0.5}
+    use_pagination = True
+    rows_num = 5
+
+    # table columns and data
+    column_data = [
+        ("Item ID", dp(20)),
+        ("Item Name", dp(50)),
+        ("Quantity", dp(20)),
+        ("Restock Status", dp(30)),
+        ("Expiration Date", dp(30)),
+        ("Expiry Status", dp(30)),
+        ("Price", dp(20)),
+    ]
+
+    invData = getInventory()
+    row_data = []
+    for i in invData:
+        stockStatus = checkRestock(i[2])
+        expStatus = checkExpiry(today, i[3])
+        newRecord=(i[0], i[1], i[2], stockStatus, i[3], expStatus, i[4])
+        row_data.append(newRecord)
+
+class RoundedButton(Button):
+    """For custom rounded buttons"""
+    pass # design settings in .kv file
+
+class CustomLabel(Label):
+    """For custom labels"""
+    pass # design settings in .kv file
+
 PinkTabInventory().run()
+
 # close db
-pinkTab.close
+pinkTab.close()
