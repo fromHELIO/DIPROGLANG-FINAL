@@ -122,7 +122,7 @@ class AddRecord(Screen):
                     try: #checks if date is valid
                         self.dateError(exp_date)
                     except:
-                        popup = Popup(title='Invalid Date', content=Label(text='Please enter a valid (YYYY-MM-DD).'), size_hint=(None, None), size=(400, 200))
+                        popup = Popup(title='Invalid Date', content=Label(text='Please enter a valid date (YYYY-MM-DD).'), size_hint=(None, None), size=(400, 200))
                         popup.open()
                     else:
                         #insert into inventory
@@ -341,16 +341,21 @@ class ShowReport(Screen):
         super().__init__(**kw)
         # get current date
         results = getInventory()
-
-        #calculate total quantity
-        self.totalQuantity = 0
-        quantities = [i[2] for i in results]
-        for i in quantities:
-            self.totalQuantity += i
+        self.inventory = Inventory()
     
     def display(self):
         """Display widgets to screen"""
-        inventory = Inventory()
+        updatedDatabase = self.inventory.formatData()
+        print(updatedDatabase)
+
+        self.inventory.update_row_data(instance_data_table=self.inventory, data=updatedDatabase)
+
+        #calculate total quantity
+        totalQuantity = 0
+        quantities = [i[2] for i in updatedDatabase]
+        for i in quantities:
+            totalQuantity += i
+
         backButton = RoundedButton(
             text = "Back",
             color = "#fccce7",
@@ -360,8 +365,9 @@ class ShowReport(Screen):
             font_size = 30,
             on_press = lambda x:self.goHome()
         )
-        self.invHolder.add_widget(CustomLabel(text=f"Total Inventory: {self.totalQuantity}", font_size=30))
-        self.invHolder.add_widget(inventory)
+        
+        self.invHolder.add_widget(CustomLabel(text=f"Total Inventory: {totalQuantity}", font_size=30))
+        self.invHolder.add_widget(self.inventory)
         self.invHolder.add_widget(backButton)
     
     def goHome(self):
@@ -396,6 +402,33 @@ class Inventory(MDDataTable):
             status = "Stocked"
         
         return status
+
+    def formatData(self):
+        """For reformating data when updating the table"""
+        newTableData = []
+        invTable = getInventory()
+        for i in invTable:
+            if i[2] < 100:
+                neededStock = 100 - i[2]
+                stockStatus = f"Restock {neededStock}"
+            else:
+                stockStatus = "Stocked"
+
+            current = dt.date.today()
+
+            if current>=i[3]:
+                expStatus = "Expired"
+            elif (i[3]-current).days < 60:
+                expStatus = "Near expiry"
+            else:
+                expStatus = "Safe"
+
+
+            newRecord=(i[0], i[1], i[2], stockStatus, i[3], expStatus, i[4])
+            newTableData.append(newRecord)
+        
+        return newTableData
+
     
     # design settings
     size_hint = (.90, .55)
