@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 29, 2025 at 10:22 AM
+-- Generation Time: Mar 31, 2025 at 10:55 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -82,13 +82,6 @@ CREATE TABLE `inventory` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `inventory`
---
-
-INSERT INTO `inventory` (`id`, `name`, `quantity`, `exp_date`, `price`) VALUES
-('SMPSD', 'Sample Soda', 199, '2025-10-23', 99.99);
-
---
 -- Indexes for dumped tables
 --
 
@@ -127,13 +120,13 @@ ALTER TABLE `inventory`
 -- AUTO_INCREMENT for table `access_log`
 --
 ALTER TABLE `access_log`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `change_log`
 --
 ALTER TABLE `change_log`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
