@@ -125,13 +125,10 @@ class AddRecord(Screen):
                         popup.open()
                     else:
                         #insert into inventory
-                        cursor.execute(f"INSERT INTO inventory(id, name, quantity, exp_date, price) VALUES ('{itemId.upper()}', '{name}', {quantity}, '{exp_date}', {price});")
+                        cursor.execute(f"INSERT INTO inventory(id, name, quantity, exp_date, price) VALUES ('{itemId.upper()}', '{name}', {quantity}, '{exp_date}', {price})")
 
-                        #insert to changelog
-                        cursor.execute(f"SELECT max(id) FROM inventory")
-                        new_item = cursor.fetchall()[0][0]
-
-                        cursor.execute(f"INSERT INTO change_log(employee_id, change_info) VALUES('{getEmpId()}', 'ADDED INVENTORY {new_item} - {name}')")
+                        #insert into change_log
+                        cursor.execute(f"INSERT INTO change_log(employee_id, change_info) VALUES('{getEmpId()}', 'ADDED INVENTORY {itemId} - {name}')")
 
                         # sucess popup
                         popup = Popup(title='Success!', content=Label(text='The item has been added to the database.'), size_hint=(None, None), size=(400, 200))
@@ -178,10 +175,7 @@ class EditRecord(Screen):
             cursor.execute(f"UPDATE inventory SET name = '{name}' WHERE id = '{itemId}'")
 
             #add to change log
-            cursor.execute(f"SELECT name FROM inventory where id = '{itemId}'")
-            editedName = cursor.fetchall()[0][0]
-            
-            cursor.execute(f"INSERT INTO change_log(employee_id, change_info) VALUES('{getEmpId()}', 'EDITED INVENTORY {itemId} NAME TO {editedName}')")
+            cursor.execute(f"INSERT INTO change_log(employee_id, change_info) VALUES('{getEmpId()}', 'EDITED INVENTORY {itemId} NAME TO {name}')")
 
             #success popup
             popup = Popup(title='Success!', content=Label(text="The item's name has been updated."), size_hint=(None, None), size=(400, 200))
@@ -208,10 +202,7 @@ class EditRecord(Screen):
                     cursor.execute(f"UPDATE inventory SET quantity = {quantity} WHERE id = '{itemId}'")
 
                     #add to change log
-                    cursor.execute(f"SELECT quantity FROM inventory where id = '{itemId}'")
-                    editedQuant = cursor.fetchall()[0][0]
-                    
-                    cursor.execute(f"INSERT INTO change_log(employee_id, change_info) VALUES('{getEmpId()}', 'EDITED INVENTORY {itemId} QUANTITY TO {editedQuant}')")
+                    cursor.execute(f"INSERT INTO change_log(employee_id, change_info) VALUES('{getEmpId()}', 'EDITED INVENTORY {itemId} QUANTITY TO {quantity}')")
 
                     #success popup
                     popup = Popup(title='Success!', content=Label(text="The item's quantity has been updated."), size_hint=(None, None), size=(400, 200))
@@ -238,10 +229,7 @@ class EditRecord(Screen):
                 cursor.execute(f"UPDATE inventory SET exp_date = '{exp_date}' WHERE id = '{itemId}'")
 
                 #add to change log
-                cursor.execute(f"SELECT exp_date FROM inventory where id = '{itemId}'")
-                editedExpDate = cursor.fetchall()[0][0]
-                
-                cursor.execute(f"INSERT INTO change_log(employee_id, change_info) VALUES('{getEmpId()}', 'EDITED INVENTORY {itemId} EXPIRATION DATE TO {editedExpDate}')")
+                cursor.execute(f"INSERT INTO change_log(employee_id, change_info) VALUES('{getEmpId()}', 'EDITED INVENTORY {itemId} EXPIRATION DATE TO {exp_date}')")
 
                 #success popup
                 popup = Popup(title='Success!', content=Label(text="The item's expiration date has been updated."), size_hint=(None, None), size=(400, 200))
@@ -268,10 +256,7 @@ class EditRecord(Screen):
                 cursor.execute(f"UPDATE inventory SET price = {price} WHERE id = '{itemId}'")
 
                 #add to change log
-                cursor.execute(f"SELECT price FROM inventory where id = '{itemId}'")
-                editedPrice = cursor.fetchall()[0][0]
-                
-                cursor.execute(f"INSERT INTO change_log(employee_id, change_info) VALUES('{getEmpId()}', 'EDITED INVENTORY {itemId} PRICE TO {editedPrice}')")
+                cursor.execute(f"INSERT INTO change_log(employee_id, change_info) VALUES('{getEmpId()}', 'EDITED INVENTORY {itemId} PRICE TO {price}')")
 
                 #success popup
                 popup = Popup(title='Success!', content=Label(text="The item's price has been updated."), size_hint=(None, None), size=(400, 200))
@@ -339,11 +324,10 @@ class ShowReport(Screen):
     def __init__(self, **kw):
         super().__init__(**kw)
         # get current date
-        results = getInventory()
         self.inventory = Inventory()
     
     def display(self):
-        """Display widgets to screen"""
+        """Display inventory, total quantity, and back button to screen"""
         updatedDatabase = self.inventory.formatData()
         print(updatedDatabase)
 
@@ -378,7 +362,7 @@ class ShowReport(Screen):
 #assets
 
 class Inventory(MDDataTable):
-    """Widget for showing database's inventoyr table"""
+    """Widget for showing database's inventory table"""
     today = dt.date.today()
 
     def checkExpiry(current, item_expd):
@@ -428,7 +412,6 @@ class Inventory(MDDataTable):
         
         return newTableData
 
-    
     # design settings
     size_hint = (.90, .55)
     pos_hint = {"center_y": 0.5, "center_x": 0.5}
@@ -461,6 +444,9 @@ class RoundedButton(Button):
 class CustomLabel(Label):
     """For custom labels"""
     pass # design settings in .kv file
+
+class LessRoundedButton(Button):
+    pass
 
 PinkTabInventory().run()
 
