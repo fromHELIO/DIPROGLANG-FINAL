@@ -54,7 +54,6 @@ class PinkTabInventory(MDApp):
     """Main app builder"""
     def build(self):
         Builder.load_file('PinkTabInventory.kv')
-        self.theme_cls.primary_palette = "Teal"
 
 class Navigator(ScreenManager):
     """For switching screens"""
